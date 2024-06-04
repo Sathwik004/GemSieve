@@ -4,38 +4,35 @@ import 'package:milkydiary/core/exceptions/server_exception.dart';
 
 abstract interface class AuthRemoteDataSource {
   Future<String> signInWithGoogle();
-  }
+}
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final FirebaseAuth firebaseAuth;//Firebase.instance
-  final GoogleSignIn googleSignIn;//GoogleSignIn()
+  final FirebaseAuth firebaseAuth; //Firebase.instance
+  final GoogleSignIn googleSignIn; //GoogleSignIn()
 
-  AuthRemoteDataSourceImpl({required this.firebaseAuth,required this.googleSignIn});
+  AuthRemoteDataSourceImpl(
+      {required this.firebaseAuth, required this.googleSignIn});
   @override
   Future<String> signInWithGoogle() async {
-    try{
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    try {
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
 
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth.accessToken,
-    idToken: googleAuth.idToken,
-  );
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-  final UserCredential userCredentials = await firebaseAuth.signInWithCredential(credential);
+      final UserCredential userCredentials =
+          await firebaseAuth.signInWithCredential(credential);
 
-  if(userCredentials.user != null){
-    throw ServerException('User is null');
-  }
-  return userCredentials.user!.uid;
-
-    }
-    catch(e){
+      return userCredentials.user!.uid;
+    } catch (e) {
       throw ServerException(e.toString());
     }
   }
-  
 }

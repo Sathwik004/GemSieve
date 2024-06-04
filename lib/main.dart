@@ -70,8 +70,8 @@ class MyHomePage extends StatelessWidget {
               appBar: AppBar(
                 title: const Text('Milky Diary'),
               ),
-              body: const Center(
-                child: Text('Welcome to Milky Diary'),
+              body: Center(
+                child: Text(state.userId),
               ),
             );
             }
