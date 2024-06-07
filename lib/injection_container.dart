@@ -8,7 +8,9 @@ import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_d
 
 final sl = GetIt.instance;
 
-Future<void> initdependencies() async {}
+Future<void> initdependencies() async {
+  _fetchDiary();
+}
 
 void _fetchDiary() {
   sl.registerFactory<DiaryDataSource>(
@@ -26,9 +28,9 @@ void _fetchDiary() {
       sl(),
     ),
   );
-  
+
   sl.registerLazySingleton(
-    () => FetchDiaryBlocBloc(
+    () => FetchDiaryBloc(
       fetchdiary: sl(),
     ),
   );

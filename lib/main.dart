@@ -3,15 +3,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_diary_bloc_bloc.dart';
 import 'package:milkydiary/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:milkydiary/features/auth/data/repositories/authrepo_imp.dart';
 import 'package:milkydiary/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:milkydiary/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:milkydiary/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:milkydiary/firebase_options.dart';
+import 'package:milkydiary/injection_container.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initdependencies();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -40,7 +43,11 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-
+         
+         // fetch diary bloc provider 
+         BlocProvider(create: (_){
+          return sl<FetchDiaryBloc>();
+         })
           //pass your BlocProviders here
         ],
         child: const MyHomePage(),
