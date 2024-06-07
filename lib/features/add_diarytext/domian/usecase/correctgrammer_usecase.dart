@@ -3,7 +3,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:milkydiary/core/error/failure.dart';
 import 'package:milkydiary/core/usecase/usecase.dart';
-import 'package:milkydiary/features/add_diarytext.dart/domian/repositories/correctgrammer_repository.dart';
+import 'package:milkydiary/features/add_diarytext/domian/repositories/correctgrammer_repository.dart';
 
 class CorrectGrammerUsecase implements UseCase<String,GrammerParam>{
   final GrammerTextRepository grammerrepo;
