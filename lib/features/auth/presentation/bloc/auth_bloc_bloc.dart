@@ -7,7 +7,7 @@ part 'auth_bloc_state.dart';
 
 class AuthBloc extends Bloc<AuthBlocEvent, AuthState> {
   final UserSignIn _userSignIn;
-  AuthBloc({required userSignIn}) :_userSignIn = userSignIn, super(AuthInitial()) {
+  AuthBloc({required UserSignIn userSignIn}) :_userSignIn = userSignIn, super(AuthInitial()) {
     on<AuthSignIn>((event, emit) async {
       emit(AuthLoadingState());
       final response = await _userSignIn(NoParams());
