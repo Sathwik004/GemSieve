@@ -7,7 +7,7 @@ Future<GeminiDiaryTextModel> fetchdiary(String input,String habits);
 }
 
 
-class DiaryDataSourceImple implements DiaryDataSource{
+class DiaryDataSourceImpl implements DiaryDataSource{
   @override
   Future<GeminiDiaryTextModel> fetchdiary(String input, String habits) async{
 
