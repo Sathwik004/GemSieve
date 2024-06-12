@@ -65,8 +65,10 @@ class DiaryDataSourceImpl implements DiaryDataSource{
     // Send message and get response
 
     try{
+
       final response = await chat.sendMessage(Content.text(input));
     String para=response.text!;
+    print(para);
     return GeminiDiaryTextModel.fromJson(para);
 
     } catch(e)

@@ -10,6 +10,6 @@ class GeminiDiaryTextModel extends GeminiDiaryText {
     //code to parse the text and the 
     
     // hello there, wassuppp
-   return GeminiDiaryTextModel(diary: "", remark: "");
+   return GeminiDiaryTextModel(diary: paragraph, remark: "");
   }
 }

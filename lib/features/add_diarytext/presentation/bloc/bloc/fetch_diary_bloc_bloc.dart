@@ -8,15 +8,23 @@ part 'fetch_diary_bloc_state.dart';
 class FetchDiaryBloc
     extends Bloc<FetchDiaryBlocEvent, FetchDiaryBlocState> {
   final FetchDiaryUsecase _fetchdiary;
-  FetchDiaryBloc({required fetchdiary})
+  FetchDiaryBloc({required FetchDiaryUsecase fetchdiary})
       : _fetchdiary = fetchdiary,
         super(FetchDiaryBlocInitial()) {
+    on<FetchDiaryWithInitialEvent>((event, emit){
+      emit(FetchDiaryBlocInitial());
+    }
+
+    );
+    
     on<FetchDiaryWithHabits>(
       (event, emit) async {
+        
         emit(FetchDiaryLoading());
 
         final response = await _fetchdiary.call(
             GetDiaryTextParams(input: event.input, myhabits: event.habits));
+          
         response.fold(
           (l) {
             emit(FetchDiaryFailure(l.message));

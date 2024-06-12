@@ -43,13 +43,13 @@ Future<void> _fetchDiary() async {
     ),
   );
 
-  serviceLocater.registerFactory<UseCase>(
+  serviceLocater.registerFactory(
     () => FetchDiaryUsecase(
       serviceLocater(),
     ),
   );
 
-  serviceLocater.registerLazySingleton(
+  serviceLocater.registerLazySingleton<FetchDiaryBloc>(
     () => FetchDiaryBloc(
       fetchdiary: serviceLocater(),
     ),

@@ -1,18 +1,27 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:milkydiary/core/themes/apppallete.dart';
+import 'package:milkydiary/features/add_diarytext/presentation/pages/add_diary_entry_page.dart';
 
 class HomeScreen extends StatefulWidget {
+  final FirebaseAuth instance;
+  HomeScreen(this.instance);
   @override
+
+
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
-  static List<Widget> _widgetOptions = <Widget>[
-    AddDiaryScreen(),
-    ProfileScreen(),
-    CalendarScreen(),
+  static final List<Widget> _widgetOptions = <Widget>[
+        CalendarScreen(),
+     const AddDiaryEntryPage(),
+      ProfileScreen(),
+   
+   
   ];
 
   void _onItemTapped(int index) {
@@ -25,14 +34,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Diary App'),
+        title: const Text("My Milky Diary"),
+        actions: [
+          TextButton(onPressed: () async{
+         await widget.instance.signOut();
+          }, child: const Text("Sign Out"))
+        ],
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
+           BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Calendar',
+          ),
           BottomNavigationBarItem(
+            
             icon: Icon(Icons.add),
             label: 'Add Diary',
           ),
@@ -40,10 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Calendar',
-          ),
+         
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
