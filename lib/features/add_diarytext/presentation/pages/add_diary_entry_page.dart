@@ -36,7 +36,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                 //  alignment: Alignment.center,
                 height: 50,
                 //  width: double.maxFinite,
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.only(top:  12, left: 24,bottom: 12,right: 24),
                 decoration: BoxDecoration(
                     color: pagecolor, borderRadius: BorderRadius.circular(12)),
                 child: Text(
@@ -44,7 +44,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                   style: TextStyle(color: textcolor),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
               Expanded(
@@ -58,23 +58,28 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                       BlocBuilder<FetchDiaryBloc, FetchDiaryBlocState>(
                         builder: (context, state) {
                           if (state is FetchDiaryBlocInitial) {
-                            return Form(
-                                child: Container(
-                              decoration: BoxDecoration(
-                            //      color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: TextFormField(
-                                maxLines: 12,
-                                decoration: const InputDecoration(
-                                 
-                                  hintText: "Write how your day was nigga!"
+                            return Expanded(
+                              child: Form(
+                                  child: Container(
+                                decoration: BoxDecoration(
+                              //      color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                   
+                                  expands: true,
+                                  maxLines: null,
+                                  minLines: null,
+                                  decoration: const InputDecoration(
+                                    fillColor: Colors.transparent,
+                                    hintText: "Write how your day was nigga!",// 
+                                  ),
+                                  //   initialValue: "Enter the Diary text",
+                                  controller: _controller,
                                 ),
-                                //   initialValue: "Enter the Diary text",
-                                controller: _controller,
-                              ),
-                            ));
+                              )),
+                            );
                           } else if (state is FetchDiaryLoading) {
-                            return Text("Loading");
+                            return Text("Loading, fetching your gemini diary now!");
                           } else if (state is FetchDiarySuccess) {
                             return Text(state.output.diary);
                           } else if (state is FetchDiaryFailure) {
@@ -83,23 +88,27 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                           return Text("BLennn");
                         },
                       ),
-                      Spacer(),
-                      Row(
+                     SizedBox(height: 3,),
+                       Row(
                         children: [
-                          OutlinedButton(
+                          ElevatedButton(
+                            style: ButtonStyle(
+                               backgroundColor:  WidgetStatePropertyAll(Colors.brown),
+                            ),
                               onPressed: () {
                                 context.read<FetchDiaryBloc>().add(
                                     FetchDiaryWithHabits(
                                         _controller.text, "1. play guitar"));
                               },
-                              child: const Text("Fetch diaryyy")),
+                              child: const Text("Fetch diary",style: TextStyle(color: Colors.white),)),
+                            const SizedBox(width: 2,),
                           OutlinedButton(
                               onPressed: () {
                                 context
                                     .read<FetchDiaryBloc>()
                                     .add(FetchDiaryWithInitialEvent());
                               },
-                              child: const Text("Edit Text")),
+                              child: Text("Edit Text")),
                               Spacer(),
                               IconButton(onPressed: (){
                                 // your taskk white nigga

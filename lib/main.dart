@@ -1,3 +1,4 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -47,38 +48,41 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-      title: "MY App" ,
-      home: BlocBuilder<AuthBloc,AuthState>(
-        builder: (context, state) {
-          if (state is AuthInitial) {
-            return const SignInPage();
-          } else if (state is AuthLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is AuthSuccessState) {
-            final instance=FirebaseAuth.instance;
-            return StreamBuilder(
-              //Help required, Idk about this part. I want to emit state depending on authChanges
-              stream: instance.authStateChanges(),
-              builder: (context, snapshot) {
-             if(snapshot.hasData)
-              {
-              return HomeScreen(instance);
-              }
-             return SignInPage();
-              
-              
-               // context.read<AuthBloc>().add(AuthChanges());
-              
-              }
-            );
-          } else if (state is AuthFailureState) {
-            return Center(child: Text(state.message));
-          } else {
-            return const Center(child: Text('Unknown state'));
-          }
-        },
+    return CalendarControllerProvider(
+      controller: EventController(),
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+        title: "MY App" ,
+        home: BlocBuilder<AuthBloc,AuthState>(
+          builder: (context, state) {
+            if (state is AuthInitial) {
+              return const SignInPage();
+            } else if (state is AuthLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is AuthSuccessState) {
+              final instance=FirebaseAuth.instance;
+              return StreamBuilder(
+                //Help required, Idk about this part. I want to emit state depending on authChanges
+                stream: instance.authStateChanges(),
+                builder: (context, snapshot) {
+               if(snapshot.hasData)
+                {
+                return HomeScreen(instance);
+                }
+               return SignInPage();
+                
+                
+                 // context.read<AuthBloc>().add(AuthChanges());
+                
+                }
+              );
+            } else if (state is AuthFailureState) {
+              return Center(child: Text(state.message));
+            } else {
+              return const Center(child: Text('Unknown state'));
+            }
+          },
+        ),
       ),
     );
   }

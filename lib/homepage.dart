@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:milkydiary/core/themes/apppallete.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/pages/add_diary_entry_page.dart';
+import 'package:milkydiary/features/add_diarytext/presentation/pages/calendarpage.dart';
+import 'package:milkydiary/features/add_diarytext/presentation/pages/userpage.dart';
 
 class HomeScreen extends StatefulWidget {
   final FirebaseAuth instance;
@@ -17,9 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
 
   static final List<Widget> _widgetOptions = <Widget>[
-        CalendarScreen(),
+        Calendarpage(),
      const AddDiaryEntryPage(),
-      ProfileScreen(),
+      const UserPage(),
    
    
   ];
@@ -41,7 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
           }, child: const Text("Sign Out"))
         ],
       ),
-      body: Center(
+      body: 
+   
+      Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
