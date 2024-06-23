@@ -1,9 +1,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:milkydiary/core/themes/apppallete.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/pages/add_diary_entry_page.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/pages/calendarpage.dart';
+import 'package:milkydiary/features/add_diarytext/presentation/pages/entry_landing_page.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/pages/userpage.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static final List<Widget> _widgetOptions = <Widget>[
         Calendarpage(),
-     const AddDiaryEntryPage(),
+     const EntryLandingPage(),
       const UserPage(),
    
    
@@ -36,11 +38,38 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("My Milky Diary"),
+        title:  Text("My Milky Diary",style: GoogleFonts.poppins().copyWith(color:Colors.brown,fontSize:24 )),
         actions: [
           TextButton(onPressed: () async{
-         await widget.instance.signOut();
-          }, child: const Text("Sign Out"))
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: Text("You really want to log out??"),
+          actions: [
+            Row(
+              children: [
+                Spacer(),
+                ElevatedButton(onPressed: ()async{     
+                     Navigator.of(context).pop();  
+                 await widget.instance.signOut();
+                 }
+                , child: Text("Yes")),
+                 ElevatedButton(onPressed: ()async{       
+                Navigator.of(context).pop();
+                 }
+                , child: Text("No")),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  },
+
+          child:  Text("Sign Out",style: GoogleFonts.poppins().copyWith(color:Colors.brown,fontSize:16 )))
         ],
       ),
       body: 

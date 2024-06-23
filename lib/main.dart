@@ -4,11 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_diary_bloc_bloc.dart';
+import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/grammar_text_bloc.dart';
 import 'package:milkydiary/init_dependencies.dart';
 import 'package:milkydiary/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:milkydiary/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:milkydiary/homepage.dart';
 import 'package:milkydiary/firebase_options.dart';
+
 //
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +19,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await initDependencies();
-  runApp( const MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -25,20 +27,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MultiBlocProvider(
-        providers: [
-          BlocProvider<AuthBloc>(
-            create: (context) => serviceLocater<AuthBloc>()
-          ),
-         
-         // fetch diary bloc provider 
-         BlocProvider<FetchDiaryBloc>(create: (context){
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(create: (context) => serviceLocater<AuthBloc>()),
+
+        // fetch diary bloc provider
+        BlocProvider<FetchDiaryBloc>(create: (context) {
           return serviceLocater<FetchDiaryBloc>();
-         })
-          //pass your BlocProviders here
-        ],
-        child: const MyHomePage(),
-     
+        }),
+        //pass your BlocProviders here
+
+        // bloc to fetch the corresponding grammers
+        BlocProvider<GrammarTextBloc>(
+          create: (context) => serviceLocater<GrammarTextBloc>(),
+        )
+      ],
+      child: const MyHomePage(), //
     );
   }
 }
@@ -51,31 +55,27 @@ class MyHomePage extends StatelessWidget {
     return CalendarControllerProvider(
       controller: EventController(),
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-        title: "MY App" ,
-        home: BlocBuilder<AuthBloc,AuthState>(
+        debugShowCheckedModeBanner: false,
+        title: "MY App",
+        home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             if (state is AuthInitial) {
               return const SignInPage();
             } else if (state is AuthLoadingState) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is AuthSuccessState) {
-              final instance=FirebaseAuth.instance;
+              final instance = FirebaseAuth.instance;
               return StreamBuilder(
-                //Help required, Idk about this part. I want to emit state depending on authChanges
-                stream: instance.authStateChanges(),
-                builder: (context, snapshot) {
-               if(snapshot.hasData)
-                {
-                return HomeScreen(instance);
-                }
-               return SignInPage();
-                
-                
-                 // context.read<AuthBloc>().add(AuthChanges());
-                
-                }
-              );
+                  //Help required, Idk about this part. I want to emit state depending on authChanges
+                  stream: instance.authStateChanges(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return HomeScreen(instance);
+                    }
+                    return SignInPage();
+
+                    // context.read<AuthBloc>().add(AuthChanges());
+                  });
             } else if (state is AuthFailureState) {
               return Center(child: Text(state.message));
             } else {

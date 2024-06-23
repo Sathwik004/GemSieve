@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:milkydiary/core/themes/apppallete.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
-
+  
   @override
   State<UserPage> createState() => _UserPageState();
 }
@@ -19,28 +22,29 @@ class _UserPageState extends State<UserPage> {
         
             Container(
               //color: const Color.fromARGB(255, 223, 223, 223),
-              decoration: BoxDecoration(
-                color: Colors.blueGrey,
-                borderRadius: BorderRadius.circular(12)
-              ),
+           
              margin: const EdgeInsets.all(12),
              padding: const EdgeInsets.all(12),
-             height: 200,
+             height: 150,
              child: Row(
               children: [
                 Container(
-                height: 150,
-                width: 120,
-                color: Colors.grey,
+                height: 120,
+                width: 80,
+                   decoration: BoxDecoration(
+                color: Colors.blueGrey,
+                borderRadius: BorderRadius.circular(12)
+              ),
+                //color: Colors.grey,
                 ),// image container
                const SizedBox(width: 12,),
-               const Column(
+                Column(
                  crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20,),
-                         Text("Chirag S "),
-                         SizedBox(height: 30,),
-                         Text("hahaha@gmail.com ")
+                  SizedBox(height: 12,),
+                         Text("Chirag S ",style: GoogleFonts.raleway().copyWith(color:Colors.brown,fontSize:24 )),
+                         SizedBox(height: 12,),
+                         Text("hahaha@gmail.com ",style: GoogleFonts.raleway().copyWith(color:Colors.brown,fontSize:14 ))
                 ],
                )
               ],
@@ -102,18 +106,20 @@ class _UserPageState extends State<UserPage> {
                         ],
                       ),
                       const Divider(),
-                      const _SingleSection(
+                       _SingleSection(
                         children: [
-                          _CustomListTile(
+                          const _CustomListTile(
                             type: "top",
                               title: "Help & Feedback",
                               icon: Icons.help_outline_rounded),
                           _CustomListTile(
                             type: "mid",
                               title: "About", icon: Icons.info_outline_rounded),
-                          _CustomListTile(
-                            type: "down",
-                              title: "Sign out", icon: Icons.exit_to_app_rounded),
+                          GestureDetector(
+                            child: _CustomListTile(
+                              type: "down",
+                                title: "Sign out", icon: Icons.exit_to_app_rounded),
+                          ),
                         ],
                       ),
                     ],
@@ -144,19 +150,19 @@ class _CustomListTile extends StatelessWidget {
     {
       case "top":
       box= BoxDecoration(
-        color: Colors.green,
+        color: pagecolor,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
       );
       break;
        case "mid":
       box= BoxDecoration(
-        color: Colors.green,
+        color: pagecolor,
       //  borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
       );
       break;
       case "down":
       box= BoxDecoration(
-        color: Colors.green,
+        color:pagecolor,
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(12))
       );
       break;
@@ -165,7 +171,7 @@ class _CustomListTile extends StatelessWidget {
     return Container(
       decoration: box!,
       child: ListTile(
-       // tileColor: Colors.green,
+       // tileColor: pagecolor,
       
         title: Text(title),
         leading: Icon(icon),

@@ -8,8 +8,12 @@ class GeminiDiaryTextModel extends GeminiDiaryText {
 
   factory GeminiDiaryTextModel.fromJson(String paragraph){
     //code to parse the text and the 
-    
+    print(paragraph);
     // hello there, wassuppp
-   return GeminiDiaryTextModel(diary: paragraph, remark: "");
+    List<String> parts=paragraph.split('\n\n');
+    String para=parts[0].trim();
+    String remark=parts[1].replaceFirst('**Remark:**', '');
+
+   return GeminiDiaryTextModel(diary: para, remark: remark);
   }
 }
