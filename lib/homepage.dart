@@ -19,14 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
-
-  static final List<Widget> _widgetOptions = <Widget>[
-        Calendarpage(),
-     const EntryLandingPage(),
-      const UserPage(),
-   
-   
-  ];
+//
 
   void _onItemTapped(int index) {
     setState(() {
@@ -36,9 +29,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+   final List<Widget> _widgetOptions = <Widget>[
+        Calendarpage(email:widget.instance.currentUser!.email! ,),
+      EntryLandingPage(email: widget.instance.currentUser!.email!,),
+       UserPage(instance: widget.instance,),
+  ];
     return Scaffold(
       appBar: AppBar(
-        title:  Text("My Milky Diary",style: GoogleFonts.poppins().copyWith(color:Colors.brown,fontSize:24 )),
+        title:  Text("My Diary",style: GoogleFonts.poppins().copyWith(color:Colors.brown,fontSize:24 )),
         actions: [
           TextButton(onPressed: () async{
     await showDialog(
@@ -75,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: 
    
       Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _widgetOptions.elementAt(_selectedIndex,),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -5,6 +7,7 @@ import 'package:milkydiary/features/add_diarytext/data/datasources/correctgramma
 import 'package:milkydiary/features/add_diarytext/data/repositories/correctgrammmer_repositoryimpl.dart';
 import 'package:milkydiary/features/add_diarytext/domian/repositories/correctgrammer_repository.dart';
 import 'package:milkydiary/features/add_diarytext/domian/usecase/correctgrammer_usecase.dart';
+import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/firebase_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/grammar_text_bloc.dart';
 import 'package:milkydiary/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:milkydiary/features/auth/data/repositories/authrepo_imp.dart';
@@ -24,6 +27,7 @@ Future<void> initDependencies() async {
   await _initAuthdependencies();
   await _fetchDiary();
  await _fetchgrammar();
+ await _firestore();
 }
 
 Future<void> _initAuthdependencies() async {
@@ -79,4 +83,10 @@ serviceLocater.registerFactory(
 serviceLocater.registerLazySingleton<GrammarTextBloc>(
 () => GrammarTextBloc(grammerusecase: serviceLocater()),
 );
+}
+
+Future<void> _firestore() async{
+  serviceLocater.registerLazySingleton<FirebaseBloc>(
+    () => FirebaseBloc(),
+  );
 }

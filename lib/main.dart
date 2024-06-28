@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_diary_bloc_bloc.dart';
+import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/firebase_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/grammar_text_bloc.dart';
 import 'package:milkydiary/init_dependencies.dart';
 import 'package:milkydiary/features/auth/presentation/bloc/auth_bloc_bloc.dart';
@@ -40,6 +41,11 @@ class MyApp extends StatelessWidget {
         // bloc to fetch the corresponding grammers
         BlocProvider<GrammarTextBloc>(
           create: (context) => serviceLocater<GrammarTextBloc>(),
+        ),
+
+        // Bloc to deal with firebase
+        BlocProvider<FirebaseBloc>(
+          create: (context) => serviceLocater<FirebaseBloc>(),
         )
       ],
       child: const MyHomePage(), //
@@ -70,14 +76,26 @@ class MyHomePage extends StatelessWidget {
                   stream: instance.authStateChanges(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return HomeScreen(instance);
+                      context.read<FirebaseBloc>().add(
+                            FireBaseRegisterUserEvent(
+                              email: snapshot.data!.email!,
+                              name: snapshot.data!.displayName!,
+                              photourl: instance.currentUser!.photoURL == null
+                                  ? "null"
+                                  : instance.currentUser!.photoURL!,
+                            ),
+                          );
+                      return HomeScreen(
+                        instance,
+                      );
                     }
                     return SignInPage();
 
                     // context.read<AuthBloc>().add(AuthChanges());
                   });
             } else if (state is AuthFailureState) {
-              return Center(child: Text(state.message));
+              return Scaffold(
+                  body: Center(child: Text(state.message + "BUild failed")));
             } else {
               return const Center(child: Text('Unknown state'));
             }
