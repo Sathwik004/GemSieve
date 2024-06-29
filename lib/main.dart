@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:milkydiary/features/speech_to_text/speech_to_text_widgets.dart';
 import 'package:milkydiary/init_dependencies.dart';
 import 'package:milkydiary/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:milkydiary/features/auth/presentation/pages/sign_up_page.dart';
@@ -55,14 +56,7 @@ class MyHomePage extends StatelessWidget {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
               context.read<AuthBloc>().add(AuthChanges());
-              return Scaffold(
-              appBar: AppBar(
-                title: const Text('Milky Diary'),
-              ),
-              body: Center(
-                child: Text(state.userId),
-              ),
-            );
+              return SpeechToTextWidget();
             }
           );
         } else if (state is AuthFailureState) {
