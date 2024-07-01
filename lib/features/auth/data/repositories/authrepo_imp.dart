@@ -24,5 +24,19 @@ class AuthRepoImp implements AuthRepo{
       
     }
   }
+
+  @override
+  Future<Either<Failure, void>> signOut() async {
+    try{
+      await authRemoteDataSource.signOut();
+      return right(null);
+    }
+    on ServerException catch(e){
+      return left(Failure(e.message));
+    }
+    catch(e){
+      return left(Failure(e.toString()));
+    }
+  }
   
 }

@@ -1,6 +1,5 @@
 import 'package:milkydiary/core/secrets/apikey.dart';
 import 'package:milkydiary/features/add_diarytext/data/models/geminidiarytextmodel.dart';
-import 'dart:io';
 import 'package:google_generative_ai/google_generative_ai.dart';
 abstract interface class DiaryDataSource{
 Future<GeminiDiaryTextModel> fetchdiary(String input,String habits);
@@ -68,7 +67,6 @@ class DiaryDataSourceImpl implements DiaryDataSource{
 
       final response = await chat.sendMessage(Content.text(input));
     String para=response.text!;
-    print(para);
     return GeminiDiaryTextModel.fromJson(para);
 
     } catch(e)

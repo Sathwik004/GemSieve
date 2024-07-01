@@ -6,8 +6,6 @@ import 'package:milkydiary/core/themes/apppallete.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_diary_bloc_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/firebase_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/grammar_text_bloc.dart';
-import 'package:milkydiary/features/add_diarytext/presentation/pages/entry_landing_page.dart';
-import 'package:milkydiary/init_dependencies.dart';
 
 class AddDiaryEntryPage extends StatefulWidget {
   const AddDiaryEntryPage({Key? key, required this.email}) : super(key: key);
@@ -27,7 +25,6 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
@@ -39,7 +36,6 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
   @override
   void dispose() {
     _controller.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -60,7 +56,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: Icon(Icons.sentiment_very_dissatisfied, size: 30),
+                icon: const Icon(Icons.sentiment_very_dissatisfied, size: 30),
                 onPressed: () {
                   emotionalState = "Very bad day";
                   Navigator.of(context).pop();
@@ -68,7 +64,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.sentiment_dissatisfied, size: 30),
+                icon: const Icon(Icons.sentiment_dissatisfied, size: 30),
                 onPressed: () {
                   emotionalState = "bad day";
                   Navigator.of(context).pop();
@@ -76,7 +72,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.sentiment_neutral, size: 30),
+                icon:const Icon(Icons.sentiment_neutral, size: 30),
                 onPressed: () {
                   emotionalState = "normal day";
                   Navigator.of(context).pop();
@@ -84,7 +80,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.sentiment_satisfied, size: 30),
+                icon:const Icon(Icons.sentiment_satisfied, size: 30),
                 onPressed: () {
                   emotionalState = "a good day";
                   Navigator.of(context).pop();
@@ -92,7 +88,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.sentiment_very_satisfied, size: 30),
+                icon:const Icon(Icons.sentiment_very_satisfied, size: 30),
                 onPressed: () {
                   emotionalState = "very good day";
                   Navigator.of(context).pop();
@@ -237,7 +233,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                                     .read<GrammarTextBloc>()
                                     .add(FetchGrammerEvent(_controller.text));
                               },
-                              child: Text("Grammer",
+                              child: Text("Grammar",
                                   style: GoogleFonts.poppins().copyWith(
                                       color: const Color.fromARGB(
                                           255, 255, 255, 255),

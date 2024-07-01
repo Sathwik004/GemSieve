@@ -19,12 +19,12 @@ class _EntryLandingPageState extends State<EntryLandingPage> {
     final currenttime = DateTime.now();
     final hours = currenttime.hour;
     if (hours < 12) {
-      return "Good Moring";
+      return "Good Moring,";
     } else if (hours < 18) {
-      return "Good Afternoon";
+      return "Good Afternoon,";
     } else
       // ignore: curly_braces_in_flow_control_structures
-      return "Good Evening";
+      return "Good Evening,";
   }
 
   @override
@@ -39,10 +39,10 @@ class _EntryLandingPageState extends State<EntryLandingPage> {
             Row(
               children: [
                 Text(
-                  greetuser() + ",",
+                  greetuser(),
                   style: GoogleFonts.caveat().copyWith(color: Colors.black,fontSize:32 )),
                 
-                Spacer(),
+                const Spacer(),
                 // Container(
                 //   width: 40,
                 //   decoration: BoxDecoration(
@@ -65,9 +65,9 @@ class _EntryLandingPageState extends State<EntryLandingPage> {
               ],
             ),
          
-            SizedBox(
-              height: 12,
-            ),
+            // SizedBox(
+            //   height: 12,
+            // ),
             Expanded(
               child: DayCards(content: "I would like to write about my day that..",email: widget.email,)
             ),

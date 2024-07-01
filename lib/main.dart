@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:milkydiary/features/speech_to_text/speech_to_text_widgets.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_diary_bloc_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/firebase_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/grammar_text_bloc.dart';
@@ -90,13 +89,13 @@ class MyHomePage extends StatelessWidget {
                         instance,
                       );
                     }
-                    return SignInPage();
+                    return const SignInPage();
 
                     // context.read<AuthBloc>().add(AuthChanges());
                   });
             } else if (state is AuthFailureState) {
               return Scaffold(
-                  body: Center(child: Text(state.message + "BUild failed")));
+                  body: Center(child: Text("(${state.message} BUild failed...")));
             } else {
               return const Center(child: Text('Unknown state'));
             }

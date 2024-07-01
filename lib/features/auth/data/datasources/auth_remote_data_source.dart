@@ -4,6 +4,7 @@ import 'package:milkydiary/core/exceptions/server_exception.dart';
 
 abstract interface class AuthRemoteDataSource {
   Future<String> signInWithGoogle();
+  Future<void> signOut();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -31,6 +32,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           await firebaseAuth.signInWithCredential(credential);
 
       return userCredentials.user!.uid;
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> signOut() async {
+    try {
+      await firebaseAuth.signOut();
     } catch (e) {
       throw ServerException(e.toString());
     }

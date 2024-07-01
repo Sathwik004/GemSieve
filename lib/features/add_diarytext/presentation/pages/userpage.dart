@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:milkydiary/core/themes/apppallete.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/firebase_bloc.dart';
+import 'package:milkydiary/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 
 class UserPage extends StatefulWidget {
   final FirebaseAuth instance;
@@ -158,11 +159,11 @@ class _UserPageState extends State<UserPage> {
                               type: "mid",
                               title: "About",
                               icon: Icons.info_outline_rounded),
-                          GestureDetector(
-                            onTap: () async {
-                              await widget.instance.signOut();
+                          TextButton(
+                            onPressed: () {
+                              context.read<AuthBloc>().add(AuthSignOut());
                             },
-                            child: _CustomListTile(
+                            child: const _CustomListTile(
                                 type: "down",
                                 title: "Sign out",
                                 icon: Icons.exit_to_app_rounded),

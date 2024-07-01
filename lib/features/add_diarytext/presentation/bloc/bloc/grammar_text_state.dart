@@ -1,7 +1,6 @@
 part of 'grammar_text_bloc.dart';
 
-@immutable
-sealed class GrammarTextState {}
+abstract class GrammarTextState {}
 
 final class GrammarTextInitial extends GrammarTextState {}
 final class GrammarTextLoading extends GrammarTextState{}

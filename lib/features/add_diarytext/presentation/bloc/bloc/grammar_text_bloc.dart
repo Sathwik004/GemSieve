@@ -1,7 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/domian/usecase/correctgrammer_usecase.dart';
-import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_diary_bloc_bloc.dart';
 
 part 'grammar_text_event.dart';
 part 'grammar_text_state.dart';

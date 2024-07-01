@@ -1,7 +1,6 @@
 part of 'grammar_text_bloc.dart';
 
-@immutable
-sealed class GrammarTextEvent {
+abstract class GrammarTextEvent {
 //  final String input;
 }
 
