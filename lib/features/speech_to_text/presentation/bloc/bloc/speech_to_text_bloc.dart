@@ -26,7 +26,6 @@ class SpeechToTextBloc extends Bloc<SpeechToTextEvent, SpeechToTextState> {
     on<SpeechToTextInitialize>(
       (event, emit) async {
         final response = await _sttInit(NoParams());
-        print('Hello Hello Hello');
 
         response.fold(
           (failure) => emit(SpeechToTextError(message: failure.message)),
@@ -39,11 +38,10 @@ class SpeechToTextBloc extends Bloc<SpeechToTextEvent, SpeechToTextState> {
       (event, emit) async {
         String lastEvent = '';
         String lasttext = '';
-        Timer? timer;
         Completer<void> completer = Completer<void>();
 
         
-        timer =  Timer.periodic(const Duration(seconds: 2), (timer) {
+        Timer.periodic(const Duration(seconds: 2), (timer) {
           if (lastEvent == lasttext && lastEvent.isNotEmpty){
             print('DONNENNENEN');
             timer.cancel();
@@ -83,10 +81,4 @@ class SpeechToTextBloc extends Bloc<SpeechToTextEvent, SpeechToTextState> {
     );
   }
 
-  @override
-  Future<void> close() {
-    // TODO: implement close
-    //controller.close();
-    return super.close();
-  }
 }

@@ -28,8 +28,6 @@ class STTRemoteDataSourceImpl implements STTRemoteDataSource {
     print('inside');
     await speechToText.listen(
       onResult: (val) {
-        print('onResultt');
-        print(val.recognizedWords);
         recognizedWordsController.add(val.recognizedWords);
       }
     );
