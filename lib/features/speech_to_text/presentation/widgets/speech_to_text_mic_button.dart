@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:milkydiary/core/themes/apppallete.dart';
 
 
 class STTMicButton extends StatefulWidget {
@@ -19,12 +20,13 @@ class _STTMicButtonState extends State<STTMicButton> {
   Widget build(BuildContext context) {
     return  AvatarGlow(
         animate: widget.isListening,
-        glowColor: Theme.of(context).primaryColor,
+        glowColor: primarycolorss,
         glowRadiusFactor: 1.0,
         duration: const Duration(milliseconds: 2000),
         repeat: true,
         startDelay: const Duration(milliseconds: 1000),
         child: FloatingActionButton(
+          backgroundColor: primarycolorss,
           onPressed: widget.isListening ? widget.stoplistening : widget.listen,
           child: Icon(widget.isListening ? Icons.mic : Icons.mic_none),
         ),

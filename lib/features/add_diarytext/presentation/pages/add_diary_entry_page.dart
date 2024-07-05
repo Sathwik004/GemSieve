@@ -6,6 +6,8 @@ import 'package:milkydiary/core/themes/apppallete.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_diary_bloc_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/firebase_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/grammar_text_bloc.dart';
+import 'package:milkydiary/features/speech_to_text/presentation/bloc/bloc/speech_to_text_bloc.dart';
+import 'package:milkydiary/features/speech_to_text/presentation/widgets/speech_to_text_mic_button.dart';
 
 class AddDiaryEntryPage extends StatefulWidget {
   const AddDiaryEntryPage({Key? key, required this.email}) : super(key: key);
@@ -22,6 +24,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
   );
   String formatter1 = DateFormat('HH:mm d MMMM, yyyy').format(DateTime.now());
   String emotionalState = "normal day";
+  bool isListening = false;
 
   @override
   void initState() {
@@ -31,12 +34,21 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
         _showIconSelectionDialog();
       },
     );
+    context.read<SpeechToTextBloc>().add(SpeechToTextInitialize());
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _stopListening() async {
+    context.read<SpeechToTextBloc>().add(SpeechToTextStop());
+  }
+
+  void _listen() async {
+    context.read<SpeechToTextBloc>().add(SpeechToTextListen());
   }
 
   void _showIconSelectionDialog() async {
@@ -72,7 +84,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                 },
               ),
               IconButton(
-                icon:const Icon(Icons.sentiment_neutral, size: 30),
+                icon: const Icon(Icons.sentiment_neutral, size: 30),
                 onPressed: () {
                   emotionalState = "normal day";
                   Navigator.of(context).pop();
@@ -80,7 +92,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                 },
               ),
               IconButton(
-                icon:const Icon(Icons.sentiment_satisfied, size: 30),
+                icon: const Icon(Icons.sentiment_satisfied, size: 30),
                 onPressed: () {
                   emotionalState = "a good day";
                   Navigator.of(context).pop();
@@ -88,7 +100,7 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                 },
               ),
               IconButton(
-                icon:const Icon(Icons.sentiment_very_satisfied, size: 30),
+                icon: const Icon(Icons.sentiment_very_satisfied, size: 30),
                 onPressed: () {
                   emotionalState = "very good day";
                   Navigator.of(context).pop();
@@ -112,7 +124,6 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             
               Container(
                 //  alignment: Alignment.center,
                 height: 70,
@@ -128,7 +139,6 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                     //     TextStyle(color: textcolor),
                     ),
               ),
-             
               const SizedBox(
                 height: 4,
               ),
@@ -150,30 +160,43 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                                   if (state1 is GrammarTextInitial) {
                                   } else if (state1 is GrammarTextLoading) {
                                     _controller.text =
-                                        "Correcting your Grammer";
+                                        "Correcting your Grammar";
                                   } else if (state1 is GrammarTextSuccess) {
                                     _controller.text = state1.grammertext;
                                   }
 
-                                  return Form(
-                                      child: Container(
-                                    decoration: BoxDecoration(
-                                        //      color: Colors.grey,
-                                        borderRadius:
-                                            BorderRadius.circular(12)),
-                                    child: TextFormField(
-                                      expands: true,
-                                      maxLines: null,
-                                      minLines: null,
-                                      decoration: const InputDecoration(
-                                        fillColor: Colors.transparent,
-                                        hintText:
-                                            "Write how your day was!", //
-                                      ),
-                                      //   initialValue: "Enter the Diary text",
-                                      controller: _controller,
-                                    ),
-                                  ));
+                                  return BlocBuilder<SpeechToTextBloc,
+                                      SpeechToTextState>(
+                                    builder: (context, state) {
+                                      if (state is SpeechToTextListening) {
+                                        isListening = true;
+                                        _controller.text = state.text;
+                                      } else if (state
+                                          is SpeechToTextAvailable) {
+                                        isListening = false;
+                                        _controller.text = state.text;
+                                      }
+                                      return Form(
+                                          child: Container(
+                                        decoration: BoxDecoration(
+                                            //      color: Colors.grey,
+                                            borderRadius:
+                                                BorderRadius.circular(12)),
+                                        child: TextFormField(
+                                          expands: true,
+                                          maxLines: null,
+                                          minLines: null,
+                                          decoration: const InputDecoration(
+                                            fillColor: Colors.transparent,
+                                            hintText:
+                                                "Write how your day was!", //
+                                          ),
+                                          //   initialValue: "Enter the Diary text",
+                                          controller: _controller,
+                                        ),
+                                      ));
+                                    },
+                                  );
                                 },
                               ),
                             );
@@ -244,11 +267,15 @@ class _AddDiaryEntryPageState extends State<AddDiaryEntryPage> {
                                 // your taskk white nigga
                               },
                               icon: const Icon(Icons.image)),
-                          IconButton(
-                              onPressed: () {
-                                // your taskk white nigga
-                              },
-                              icon: const Icon(Icons.mic)),
+                          BlocBuilder<SpeechToTextBloc, SpeechToTextState>(
+                            builder: (context, state) {
+                              return state is SpeechToTextError? const SizedBox(width: 10): STTMicButton(
+                                isListening: state is SpeechToTextListening,
+                                listen: _listen,
+                                stoplistening: _stopListening,
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ],

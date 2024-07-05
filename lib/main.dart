@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_diary_bloc_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/firebase_bloc.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/grammar_text_bloc.dart';
+import 'package:milkydiary/features/speech_to_text/presentation/bloc/bloc/speech_to_text_bloc.dart';
 import 'package:milkydiary/init_dependencies.dart';
 import 'package:milkydiary/features/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:milkydiary/features/auth/presentation/pages/sign_up_page.dart';
@@ -46,7 +47,12 @@ class MyApp extends StatelessWidget {
         // Bloc to deal with firebase
         BlocProvider<FirebaseBloc>(
           create: (context) => serviceLocater<FirebaseBloc>(),
-        )
+        ),
+
+        // Bloc to deal with speech to text
+        BlocProvider<SpeechToTextBloc>(
+          create: (context) => serviceLocater<SpeechToTextBloc>(),
+        ),
       ],
       child: const MyHomePage(), //
     );

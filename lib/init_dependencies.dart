@@ -18,28 +18,58 @@ import 'package:milkydiary/features/add_diarytext/data/repositories/diarytextrep
 import 'package:milkydiary/features/add_diarytext/domian/repositories/diarytextrepository.dart';
 import 'package:milkydiary/features/add_diarytext/domian/usecase/fetchdiary_usecase.dart';
 import 'package:milkydiary/features/add_diarytext/presentation/bloc/bloc/fetch_diary_bloc_bloc.dart';
+import 'package:milkydiary/features/speech_to_text/data/datasources/stt_remote_data_source.dart';
+import 'package:milkydiary/features/speech_to_text/data/repositories/stt_repo_imp.dart';
+import 'package:milkydiary/features/speech_to_text/domain/repository/stt_repo.dart';
+import 'package:milkydiary/features/speech_to_text/domain/usecases/stt_init.dart';
+import 'package:milkydiary/features/speech_to_text/domain/usecases/stt_listen.dart';
+import 'package:milkydiary/features/speech_to_text/domain/usecases/stt_stop.dart';
+import 'package:milkydiary/features/speech_to_text/presentation/bloc/bloc/speech_to_text_bloc.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 final serviceLocater = GetIt.instance;
 
 Future<void> initDependencies() async {
   await _initAuthdependencies();
   await _fetchDiary();
- await _fetchgrammar();
- await _firestore();
+  await _fetchgrammar();
+  await _firestore();
+  await _initSpeechToText();
 }
 
 Future<void> _initAuthdependencies() async {
-  serviceLocater.registerLazySingleton(() => GoogleSignIn(),);
+  serviceLocater.registerLazySingleton(
+    () => GoogleSignIn(),
+  );
 
-  serviceLocater.registerFactory<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(firebaseAuth: FirebaseAuth.instance, googleSignIn: serviceLocater(),),);
+  serviceLocater.registerFactory<AuthRemoteDataSource>(
+    () => AuthRemoteDataSourceImpl(
+      firebaseAuth: FirebaseAuth.instance,
+      googleSignIn: serviceLocater(),
+    ),
+  );
 
-  serviceLocater.registerFactory<AuthRepo>(() => AuthRepoImp(authRemoteDataSource: serviceLocater(),),);
+  serviceLocater.registerFactory<AuthRepo>(
+    () => AuthRepoImp(
+      authRemoteDataSource: serviceLocater(),
+    ),
+  );
 
-  serviceLocater.registerFactory(() => UserSignIn(authRepo: serviceLocater(),),);
+  serviceLocater.registerFactory(
+    () => UserSignIn(
+      authRepo: serviceLocater(),
+    ),
+  );
 
-  serviceLocater.registerFactory(() => UserSignOut(authRepo: serviceLocater(),),);
+  serviceLocater.registerFactory(
+    () => UserSignOut(
+      authRepo: serviceLocater(),
+    ),
+  );
 
-  serviceLocater.registerLazySingleton<AuthBloc>(() => AuthBloc(userSignIn: serviceLocater(), userSignOut: serviceLocater()),);
+  serviceLocater.registerLazySingleton<AuthBloc>(
+    () => AuthBloc(userSignIn: serviceLocater(), userSignOut: serviceLocater()),
+  );
 }
 
 Future<void> _fetchDiary() async {
@@ -66,27 +96,61 @@ Future<void> _fetchDiary() async {
   );
 }
 
-Future<void> _fetchgrammar() async
-{
-serviceLocater.registerFactory<Grammartextdatasource>(
-  () => GrammerTextdatasourceimpl(),
-);
+Future<void> _fetchgrammar() async {
+  serviceLocater.registerFactory<Grammartextdatasource>(
+    () => GrammerTextdatasourceimpl(),
+  );
 
-serviceLocater.registerFactory<GrammerTextRepository>(
-  () => CorrectgrammmerRepositoryimpl(serviceLocater()),
-);
+  serviceLocater.registerFactory<GrammerTextRepository>(
+    () => CorrectgrammmerRepositoryimpl(serviceLocater()),
+  );
 
-serviceLocater.registerFactory(
-  () => CorrectGrammerUsecase(serviceLocater()),
-);
+  serviceLocater.registerFactory(
+    () => CorrectGrammerUsecase(serviceLocater()),
+  );
 
-serviceLocater.registerLazySingleton<GrammarTextBloc>(
-() => GrammarTextBloc(grammerusecase: serviceLocater()),
-);
+  serviceLocater.registerLazySingleton<GrammarTextBloc>(
+    () => GrammarTextBloc(grammerusecase: serviceLocater()),
+  );
 }
 
-Future<void> _firestore() async{
+Future<void> _firestore() async {
   serviceLocater.registerLazySingleton<FirebaseBloc>(
     () => FirebaseBloc(),
+  );
+}
+
+Future<void> _initSpeechToText() async {
+  serviceLocater.registerLazySingleton(
+    () => stt.SpeechToText(),
+  );
+
+  serviceLocater.registerFactory<STTRemoteDataSource>(
+    () => STTRemoteDataSourceImpl(
+      speechToText: serviceLocater(),
+    ),
+  );
+
+  serviceLocater.registerFactory<STTRepo>(
+    () => STTRepoImp(sttRemoteDataSource: serviceLocater()),
+  );
+
+  serviceLocater.registerFactory(
+    () => STTInit(sttRepo: serviceLocater()),
+  );
+
+  serviceLocater.registerFactory(
+    () => SttListen(sttRepo: serviceLocater()),
+  );
+
+  serviceLocater.registerFactory(
+    () => SttStop(sttRepo: serviceLocater()),
+  );
+
+  serviceLocater.registerLazySingleton<SpeechToTextBloc>(
+    () => SpeechToTextBloc(
+        sttInit: serviceLocater(),
+        sttListen: serviceLocater(),
+        sttStop: serviceLocater()),
   );
 }
